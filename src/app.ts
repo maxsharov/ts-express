@@ -1,21 +1,17 @@
-import express from "express"
+import express, { Express } from 'express'
+import router from './router'
 
-const application = express()
+const app: Express = express()
+const PORT = process.env.PORT || 5000
 
-const port = 3000
+app.use(router)
 
-application
-  .get("/", (req, res) => {
-    res.send({
-      message: "Hello, World!",
-    })
-  })
-  .get("/random", (req, res) => {
-    res.send({
-      number: Math.floor(Math.random() * 100),
-    })
-  })
+const start = async () => {
+  try {
+    app.listen(PORT, () => console.log(`Server started on ${PORT} port`))
+  } catch (e) {
+    console.log(e)
+  }
+}
 
-application.listen(port, () => {
-  console.log(`Application listening on port ${port}`)
-})
+start()
