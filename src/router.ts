@@ -68,7 +68,7 @@ router.get('/get-tokens', (req, res) => {
   )
 })
 
-router.get('/get-images', (req, res) => {
+function getImages (req, res) {
   const results = []
 
   const dir = './images/'
@@ -88,7 +88,9 @@ router.get('/get-images', (req, res) => {
   } catch (err) {
     console.log(err)
   }
-})
+}
+
+router.get('/get-images', getImages)
 
 router.get('/sync-images', (req, res) => {
 
@@ -145,6 +147,9 @@ router.get('/sync-images', (req, res) => {
           content_hash: 'efba51e9db838068f3c59fe7cc77a8f726d93bfdfcfb492df5518756a526c7cc'
         }
       */
+
+      const imagePath = path.join('images/', file.name)
+
       dropbox({
         resource: 'files/download',
         parameters: {
@@ -162,9 +167,11 @@ router.get('/sync-images', (req, res) => {
             // redirect to get-images with cursor
             console.log('here we need to redirect to get-images with cursor', store.cursor)
             res.redirect('/sync-images')
+          } else {
+            // everything is downloaded
           }
       })
-      .pipe(fs.createWriteStream(path.join('images/', file.name)))
+      .pipe(fs.createWriteStream(imagePath, { flags: 'a+' }))
 
       // console.log('after download ?')
     }
