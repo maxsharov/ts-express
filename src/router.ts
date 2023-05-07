@@ -18,21 +18,14 @@ const dropbox = dropboxV2Api.authenticate({
 })
 
 router.get('/', (_req: Request, res: Response) => {
-  return res.send('Express Typescript on Render')
+  return res.send('<a href="/login">Login</html>')
 })
 
-router.get('/login', async (req, res) => {
-  console.log('we are in the /login')
-
+router.get('/login', async (_req: Request, res: Response) => {
   const authUrl = dropbox.generateAuthUrl();
 
-  console.log(authUrl)
-  // await open(authUrl)
-  // dbxAuth.getAuthenticationUrl(redirectUri, undefined, 'code', 'offline', undefined, undefined, true)
-  // .then((authUrl) => {
-    res.writeHead(302, { Location: authUrl })
-    res.end()
-  // });
+  res.writeHead(302, { Location: authUrl })
+  res.end()
 })
 
 router.get('/refresh-token', (req, res) => {
