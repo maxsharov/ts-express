@@ -69,6 +69,10 @@ router.get('/get-images', (req, res) => {
   const dir = './images/'
 
   try {
+    if (!fs.existsSync(dir)){
+      fs.mkdirSync(dir);
+    }
+
     const files = fs.readdirSync(dir)
   
     files.forEach(file => {
