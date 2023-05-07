@@ -56,6 +56,11 @@ router.get('/auth', (req, res) => {
   });
 })
 
+router.get('/reset-tokens', () => {
+  store.accessToken = null
+  store.refreshToken = null
+})
+
 router.get('/get-tokens', (req, res) => {
   res.send(
     'Access token is ' + store.accessToken + 
