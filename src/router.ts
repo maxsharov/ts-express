@@ -52,7 +52,7 @@ router.get('/auth', (req, res) => {
     // dropbox.refreshToken(response.refresh_token, (err, result, response) => {
     //     //token is refreshed!
     // });
-    res.redirect('/get-images')
+    res.redirect('/?auth=1')
   });
 })
 
@@ -64,6 +64,24 @@ router.get('/get-tokens', (req, res) => {
 })
 
 router.get('/get-images', (req, res) => {
+  const results = []
+
+  const dir = './images/'
+
+  try {
+    const files = fs.readdirSync(dir)
+  
+    files.forEach(file => {
+      results.push(file)
+    })
+
+    res.json(results)
+  } catch (err) {
+    console.log(err)
+  }
+})
+
+router.get('/sync-images', (req, res) => {
 
   const cursor = store.cursor
 
@@ -89,7 +107,7 @@ router.get('/get-images', (req, res) => {
   }
 
   dropbox(dropboxConfig, async (err: any, result: { has_more: any; cursor: null; entries: any }, response: any) => {
-    console.log('some result', result)
+    // console.log('some result', result)
 
     if (result.has_more) {
       store.cursor = result.cursor
@@ -134,12 +152,12 @@ router.get('/get-images', (req, res) => {
           if (i === files.length && store.cursor) {
             // redirect to get-images with cursor
             console.log('here we need to redirect to get-images with cursor', store.cursor)
-            res.redirect('/get-images')
+            res.redirect('/sync-images')
           }
       })
       .pipe(fs.createWriteStream(path.join('images/', file.name)))
 
-      console.log('after download ?')
+      // console.log('after download ?')
     }
   })
 })
