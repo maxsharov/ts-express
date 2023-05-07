@@ -4,6 +4,7 @@ import router from './router'
 const app: Express = express()
 const PORT = process.env.PORT || 5000
 
+app.use('/images', express.static('images'))
 app.use(router)
 
 const start = async () => {
