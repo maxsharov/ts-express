@@ -14,14 +14,26 @@ async function syncImagesService() {
     for (let file of files) {
       const data = await dbx.filesDownload({ path: file.id })
 
-      fs.writeFile(path.join('images', data.result.name), (<any> data).result.fileBinary, { encoding: 'binary' }, (err) => {
-        // if (err) { throw err; }
-        console.log(`File: ${data.result.name} saved.`)
+      const imagePath = path.join('images', data.result.name)
+
+      fs.access(imagePath, function (error) {
+        if (error) {
+          fs.writeFile(
+            path.join('images', data.result.name), 
+            (<any> data).result.fileBinary, 
+            { encoding: 'binary' },
+            (err) => {
+              if (err) { 
+                // console.log(`File: ${data.result.name} exists.`)
+              }
+              console.log(`File: ${data.result.name} saved.`)
+            }
+          )
+        } else {
+          console.log(`File: ${data.result.name} exists.`)
+        }
       })
     }
-
-    // const cursor = store.cursor
-
   } catch(err) {
     console.log(err)
   }

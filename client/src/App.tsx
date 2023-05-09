@@ -18,7 +18,7 @@ function App() {
 
       fetch('/sync-images')
         .then((response) => {
-          console.log('sync response', response)
+          // console.log('sync response', response)
 
           if (response.status === 401) {
             window.location.href = '/'
@@ -27,46 +27,27 @@ function App() {
           }
         })
 
-      // console.log('new setTimeout syncImages')
-      // timerId = setTimeout(syncImages, 5000)
-
-
     }, 5000)
 
     return () => {
       clearTimeout(timerId)
     }
-    // setInterval(() => {
-      
-    //   fetch('/sync-images')
-    //     .then((response) => {
-    //       console.log('sync response', response)
-
-    //       if (response.status === 401) {
-    //         window.location.href = '/'
-    //       }
-    //     })
-    //     // .catch((err) => {
-    //     //   console.log('sync error', err)
-          
-    //     // })
-    // }, 10000)
-    
   }, [])
 
   useEffect(() => {
     if (!isAuth) return
 
-    setInterval(() => {
+    let timerId = setTimeout(function syncImages() {
       fetch('/get-images').then((result) => {
         return result.json()
       }).then((result) => {
-        // console.log('files result', result)
-        
         setImages(result)
       })
     }, 5000)
 
+    return () => {
+      clearTimeout(timerId)
+    }
   }, [])
 
   if (isAuth && images.length === 0) {
