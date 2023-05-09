@@ -5,6 +5,8 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
+    "build:client": "yarn --cwd client build",
+    "build:all": "yarn build && yarn build:client",
     "start": "node ./dist/app.js",
     "dev:server": "nodemon src/app.ts",
     "dev:client": "yarn --cwd client start",
@@ -18,6 +20,7 @@
   },
   "dependencies": {
     "dotenv": "^16.0.3",
+    "dropbox": "^10.34.0",
     "dropbox-v2-api": "^2.5.10",
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
