@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
 import * as dotenv from 'dotenv'
-import dropboxV2Api from 'dropbox-v2-api'
+// import dropboxV2Api from 'dropbox-v2-api'
 import store from './store'
 import fs from 'fs'
 import fsPromises from "node:fs/promises"
@@ -14,13 +14,13 @@ dotenv.config()
 
 const router = express.Router()
 
-const dropbox = dropboxV2Api.authenticate({
-  client_id: process.env.DROPBOX_CLIENT_ID,
-  client_secret: process.env.DROPBOX_CLIENT_SECRET,
-  redirect_uri: process.env.DROPBOX_REDIRECT_URI,
-  token_access_type: 'offline', // if you need an offline long-living refresh token
-  state: 'OPTIONAL_STATE_VALUE'
-})
+// const dropbox = dropboxV2Api.authenticate({
+//   client_id: process.env.DROPBOX_CLIENT_ID,
+//   client_secret: process.env.DROPBOX_CLIENT_SECRET,
+//   redirect_uri: process.env.DROPBOX_REDIRECT_URI,
+//   token_access_type: 'offline', // if you need an offline long-living refresh token
+//   state: 'OPTIONAL_STATE_VALUE'
+// })
 
 // const dbx = new Dropbox({
 //   clientId: process.env.CLIENT_ID
@@ -55,11 +55,12 @@ router.get('/login', async (_req: Request, res: Response) => {
 })
 
 router.get('/refresh-token', (req, res) => {
-  dropbox.refreshToken(store.refreshToken, (err: any, result: { access_token: string }) => {
-    store.accessToken = result.access_token
-    console.log('refresh token result', result)
+  // TODO: Make refresh token
+  // dropbox.refreshToken(store.refreshToken, (err: any, result: { access_token: string }) => {
+  //   store.accessToken = result.access_token
+  //   console.log('refresh token result', result)
 
-  })
+  // })
 })
 
 router.get('/auth',  async (req, res) => {
@@ -147,6 +148,7 @@ async function syncImages (req, res, next) {
   await syncImagesService()
   return res.json({ "message": "done" })
 
+  /*
   const dbx = new Dropbox({ accessToken: store.accessToken })
 
   const result = await dbx.filesListFolder({ path: '/samples' })
@@ -191,21 +193,7 @@ async function syncImages (req, res, next) {
     for (let file of files) {
     
       // console.log('file', file)
-      /**
-        file {
-          '.tag': 'file',
-          name: 'image-1.jpg',
-          path_lower: '/samples/image-1.jpg',
-          path_display: '/samples/image-1.jpg',
-          id: 'id:hiWNdCyIIa0AAAAAAAAAHg',
-          client_modified: '2023-05-05T08:40:07Z',
-          server_modified: '2023-05-05T08:40:07Z',
-          rev: '5faee3c7d24d40df7edef',
-          size: 187741,
-          is_downloadable: true,
-          content_hash: 'efba51e9db838068f3c59fe7cc77a8f726d93bfdfcfb492df5518756a526c7cc'
-        }
-      */
+
 
       const imagePath = path.join('images/', file.name)
 
@@ -236,6 +224,24 @@ async function syncImages (req, res, next) {
       // console.log('after download ?')
     }
   })
+
+  */
+
+        /**
+        file {
+          '.tag': 'file',
+          name: 'image-1.jpg',
+          path_lower: '/samples/image-1.jpg',
+          path_display: '/samples/image-1.jpg',
+          id: 'id:hiWNdCyIIa0AAAAAAAAAHg',
+          client_modified: '2023-05-05T08:40:07Z',
+          server_modified: '2023-05-05T08:40:07Z',
+          rev: '5faee3c7d24d40df7edef',
+          size: 187741,
+          is_downloadable: true,
+          content_hash: 'efba51e9db838068f3c59fe7cc77a8f726d93bfdfcfb492df5518756a526c7cc'
+        }
+      */
 }
 
 router.get('/sync-images', authMiddleware, syncImages)

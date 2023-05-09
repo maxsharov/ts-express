@@ -6,8 +6,8 @@
   "scripts": {
     "build:server": "tsc",
     "build:client": "yarn --cwd client build",
-    "build": "yarn build && yarn build:client",
-    "start": "node ./dist/start/app.js",
+    "build": "yarn build:server && yarn build:client",
+    "start": "node ./dist/src/app.js",
     "dev:server": "nodemon src/app.ts",
     "dev:client": "yarn --cwd client start",
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\""
@@ -21,9 +21,11 @@
   "dependencies": {
     "dotenv": "^16.0.3",
     "dropbox": "^10.34.0",
-    "dropbox-v2-api": "^2.5.10",
     "express": "^4.18.2",
     "nodemon": "^2.0.22",
     "ts-node": "^10.9.1"
+  },
+  "engines": {
+    "node": "16.13.1"
   }
 }
