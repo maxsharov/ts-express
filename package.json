@@ -4,10 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build:server": "tsc",
     "build:client": "yarn --cwd client build",
-    "build:all": "yarn build && yarn build:client",
-    "start": "node ./dist/app.js",
+    "build": "yarn build && yarn build:client",
+    "start": "node ./dist/start/app.js",
     "dev:server": "nodemon src/app.ts",
     "dev:client": "yarn --cwd client start",
     "dev": "concurrently \"yarn dev:server\" \"yarn dev:client\""
